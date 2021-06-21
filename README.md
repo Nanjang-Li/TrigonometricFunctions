@@ -1,2 +1,2 @@
 # TrigonometricFunctions
-Trigonometric Functions
+A Calculator for Trigonometric Functions
