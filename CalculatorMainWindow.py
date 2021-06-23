@@ -1,7 +1,9 @@
 import sys
 from TriCalculatorUi.CalculatorUi import UiMainWindow
 from TriFunctions.sin import sin
+from TriFunctions.cos import cos
 from TriFunctions.arcsin import asin
+from TriFunctions.arctan import atan
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
 
@@ -57,7 +59,9 @@ class MainWindow(QMainWindow):
         计算输入值的cos值
         :return: None
         """
-        print(self.str_to_number())
+        input_value = self.str_to_number()  # 获取用户输入
+        result = cos(input_value)  # 计算
+        self.display_to_box(str(result))  # 显示结果
 
     def computer_arcsin(self):
         """
@@ -76,7 +80,9 @@ class MainWindow(QMainWindow):
         计算输入值的arctan值
         :return: None
         """
-        print(self.str_to_number())
+        input_value = self.str_to_number()  # 获取用户输入
+        result = atan(input_value)  # 计算
+        self.display_to_box(str(result))  # 显示结果
 
     def display_number(self, number):
         """
