@@ -1,5 +1,0 @@
-def cos(x, m):
-    value = 0
-    for i in range(0, m+1):
-        value += ((-1) ** (i)) * ((x ** (2*i)) / factorial(2*i))
-    return value
