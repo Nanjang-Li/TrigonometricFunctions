@@ -17,7 +17,7 @@ def taylor(x,n):
     count+=1
   return a
 def cos(x):
-  return taylor(x,50)
+  return round(taylor(x,50),3)
 
-print(cos(1))
+# print(cos(5))
 
