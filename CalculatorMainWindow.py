@@ -12,6 +12,8 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent=None)
         self.ui = UiMainWindow()
         self.ui.setup_ui(self)
+        self.is_compute = False  # 标志位，是否进行了运算
+        self.is_error = False   # 标志位，运算是否出错，出错了运算按钮将锁死
         self.ui.number_0_button.clicked.connect(lambda: self.display_number(0))
         self.ui.number_1_button.clicked.connect(lambda: self.display_number(1))
         self.ui.number_2_button.clicked.connect(lambda: self.display_number(2))
@@ -25,10 +27,10 @@ class MainWindow(QMainWindow):
         self.ui.del_button.clicked.connect(self.display_delete_one_number)
         self.ui.reset_button.clicked.connect(self.display_reset)
         self.ui.dot_button.clicked.connect(self.display_dot)
-        self.ui.sin_button.clicked.connect(self.computer_sin)
-        self.ui.cos_button.clicked.connect(self.computer_cos)
-        self.ui.arcsin_button.clicked.connect(self.computer_arcsin)
-        self.ui.arctan_button.clicked.connect(self.computer_arctan)
+        self.ui.sin_button.clicked.connect(lambda: self.compute(0))
+        self.ui.cos_button.clicked.connect(lambda: self.compute(1))
+        self.ui.arctan_button.clicked.connect(lambda: self.compute(2))
+        self.ui.arcsin_button.clicked.connect(lambda: self.compute(3))
 
     def str_to_number(self):
         """
@@ -45,44 +47,31 @@ class MainWindow(QMainWindow):
         """
         self.ui.display_box.setText(content)
 
-    def computer_sin(self):
+    def compute(self, compute_type):
         """
-        计算输入值的sin值
-        :return: None
+        根据不同的按钮功能，对用户输入进行计算，将计算结果显示到显示框上；
+        :param compute_type: int，计算类型的标识；
+        :return: None；
         """
+        if self.is_error:
+            return
         input_value = self.str_to_number()  # 获取用户输入
-        result = sin(input_value)  # 计算
+        if compute_type == 0:
+            result = sin(input_value)  # 计算sin
+        elif compute_type == 1:
+            result = cos(input_value)  # 计算cos
+        elif compute_type == 2:
+            result = str(atan(input_value)) + "°"  # 计算arctan
+        else:
+            result = asin(input_value)  # 计算arcsin
+            if isinstance(result, bool):
+                # 返回一个bool值说明输入有误，显示提示信息
+                result = "无效输入"
+                self.is_error = True
+            else:
+                result = str(result) + "°"
         self.display_to_box(str(result))  # 显示结果
-
-    def computer_cos(self):
-        """
-        计算输入值的cos值
-        :return: None
-        """
-        input_value = self.str_to_number()  # 获取用户输入
-        result = cos(input_value)  # 计算
-        self.display_to_box(str(result))  # 显示结果
-
-    def computer_arcsin(self):
-        """
-        计算输入值的arcsin值
-        :return: None
-        """
-        input_value = self.str_to_number()  # 获取用户输入
-        result = asin(input_value)
-        if isinstance(result, bool):
-            # 返回一个bool值说明输入有误，显示提示信息
-            result = "无效输入"
-        self.display_to_box(str(result))    # 显示结果
-
-    def computer_arctan(self):
-        """
-        计算输入值的arctan值
-        :return: None
-        """
-        input_value = self.str_to_number()  # 获取用户输入
-        result = atan(input_value)  # 计算
-        self.display_to_box(str(result))  # 显示结果
+        self.is_compute = True
 
     def display_number(self, number):
         """
@@ -91,11 +80,13 @@ class MainWindow(QMainWindow):
         :return: None
         """
         display_content = self.ui.display_box.text()  # 获取显示框的文本
-        if display_content == "0":
+        if display_content == "0" or self.is_compute:
             display_content = str(number)  # 当前内容为0，直接更新为的按钮数字
         else:
             display_content += str(number)  # 当前内容不为0，追加数字
         self.display_to_box(display_content)  # 回显内容
+        self.is_compute = False
+        self.is_error = False
 
     def display_dot(self):
         """
@@ -103,7 +94,7 @@ class MainWindow(QMainWindow):
         :return: None
         """
         display_content = self.ui.display_box.text()  # 获取显示框的文本
-        if "." in display_content:
+        if "." in display_content or self.is_compute:
             return
         else:
             display_content += "."  # 追加一个小数点
@@ -116,6 +107,8 @@ class MainWindow(QMainWindow):
         :return: None;
         """
         display_content = self.ui.display_box.text()  # 获取显示框文本
+        if self.is_compute:
+            return
         if len(display_content) == 1:
             display_content = "0"  # 当显示框上的数值只有一位时，再次按清除按钮显示0；
         else:
@@ -127,6 +120,8 @@ class MainWindow(QMainWindow):
         重置显示框上的内容为0
         :return:None
         """
+        self.is_compute = False
+        self.is_error = False
         self.display_to_box("0")
 
 

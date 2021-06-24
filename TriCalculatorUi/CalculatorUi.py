@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Calculatori.ui'
+# Form implementation generated from reading ui file 'Calculator.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.3
 #
@@ -9,8 +9,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-WIDTH = (75 + 2 * 2) * 4 + 3
-HEIGHT = (50 + 2 * 2) * 5 + 3 + 70
+WIDTH = (75 + 2 * 2) * 4 + 3  # 窗口宽度
+HEIGHT = (50 + 2 * 2) * 5 + 3 + 70  # 窗口高度
+# 按钮样式
 button_style = "QPushButton{" \
                "background-color:rgb(0,0,0);" \
                "border:1px solid rgb(216,216,216);" \
@@ -25,6 +26,10 @@ button_style = "QPushButton{" \
 
 
 class Button(QtWidgets.QPushButton):
+    """
+    所有按钮父类，设置按钮尺寸和样式
+    """
+
     def __init__(self, parent):
         super(Button, self).__init__(parent)
         self.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed))
@@ -32,16 +37,28 @@ class Button(QtWidgets.QPushButton):
 
 
 class NumberButton(Button):
+    """
+    数字按钮
+    """
+
     def __init__(self, parent=None):
         super(NumberButton, self).__init__(parent)
 
 
 class TrigonometricButton(Button):
+    """
+    运算按钮
+    """
+
     def __init__(self, parent=None):
         super(TrigonometricButton, self).__init__(parent)
 
 
 class FunctionButton(Button):
+    """
+    功能按钮
+    """
+
     def __init__(self, parent=None):
         super(FunctionButton, self).__init__(parent)
         self.setSizePolicy(QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding))
@@ -60,15 +77,15 @@ class UiMainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
-        self.gridLayout.setSpacing(2)
+        self.gridLayout.setSpacing(2)  # 设置按钮之间的间隔
         # 输入显示框
         self.display_box = QtWidgets.QLabel(self.gridLayoutWidget)
         self.display_box.setObjectName("display_box")
         self.display_box.setFixedHeight(70)
-        self.display_box.setText("0")
+        self.display_box.setText("0")  # 设置显示框默认显示内容
         self.display_box.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignBottom)
-        self.display_box.setStyleSheet("color:rgb(255,255,255);"
-                                       "font:bold 24pt \"Arial\";"
+        self.display_box.setStyleSheet("color: rgb(255,255,255);"
+                                       "font: 300 24pt \"Arial\";"
                                        )
         self.display_box.setContentsMargins(0, 0, 5, 3)
         self.gridLayout.addWidget(self.display_box, 0, 0, 1, 4)
@@ -88,9 +105,7 @@ class UiMainWindow(object):
         # 数字按钮0-9
         self.number_0_button = NumberButton(self.gridLayoutWidget)
         self.number_0_button.setObjectName("number_0_button")
-        self.number_0_button.setSizePolicy(
-            QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed))
-        self.gridLayout.addWidget(self.number_0_button, 5, 0, 1, 2)
+        self.gridLayout.addWidget(self.number_0_button, 5, 1, 1, 1)
         self.number_1_button = NumberButton(self.gridLayoutWidget)
         self.number_1_button.setObjectName("number_1_button")
         self.gridLayout.addWidget(self.number_1_button, 4, 0, 1, 1)
@@ -130,6 +145,10 @@ class UiMainWindow(object):
         self.del_button = FunctionButton(self.gridLayoutWidget)
         self.del_button.setObjectName("del_button")
         self.gridLayout.addWidget(self.del_button, 4, 3, 2, 1)
+        # +/-按钮
+        self.sign_button = FunctionButton(self.gridLayoutWidget)
+        self.sign_button.setObjectName("sign_button")
+        self.gridLayout.addWidget(self.sign_button, 5, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -155,3 +174,4 @@ class UiMainWindow(object):
         self.number_3_button.setText(_translate("MainWindow", "3"))
         self.number_4_button.setText(_translate("MainWindow", "4"))
         self.del_button.setText(_translate("MainWindow", "del"))
+        self.sign_button.setText(_translate("MainWindow", "+/-"))
