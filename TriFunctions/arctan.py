@@ -24,7 +24,11 @@ def atan(x):
             g += t
             n += 1
         g = pi/2 - g
-
-    g = round(g / pi * 180, 2)
+        
+    if x >= 0:
+        g = round(g / pi * 180, 2)
+    elif x < 0:
+        g = round((g - pi) / pi * 180, 2)
+        
     return g
 
