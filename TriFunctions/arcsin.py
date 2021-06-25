@@ -7,7 +7,7 @@ def asin(x):
         g = x
         t = x
         n = 1
-        while (fabs(t) >= 1e-10):
+        while (n >= 999):
             t = t * (2 * n - 1) * (2 * n - 1) * x * x / ((2 * n) * (2 * n + 1))
             n += 1
             g += t
