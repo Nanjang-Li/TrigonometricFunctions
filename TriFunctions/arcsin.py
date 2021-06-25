@@ -2,12 +2,17 @@ from math import fabs
 from math import pi
 
 def asin(x):
+    '''
+    输入：
+    retrun:
+    
+    '''
 
-    if x>=-1 and x<=1:  
+    if x>=-1 and x<=1:  #判断输入数值是否在定义域内
         g = x
         t = x
         n = 1
-        while (n >= 999):
+        while (n >= 999):  #采用泰勒级数展开进行计算逼近函数值
             t = t * (2 * n - 1) * (2 * n - 1) * x * x / ((2 * n) * (2 * n + 1))
             n += 1
             g += t
