@@ -3,8 +3,8 @@ from math import pi
 
 def asin(x):
     '''
-    输入：
-    retrun:
+    :param x: 输入参数为数值
+    :return g or error:输出为角度值或抛出异常
     
     '''
 
