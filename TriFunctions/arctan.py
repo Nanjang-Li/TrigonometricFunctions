@@ -27,8 +27,13 @@ def atan(x):
         
     if x >= 0:
         g = round(g / pi * 180, 2)
+    
     elif x < 0:
-        g = round((g - pi) / pi * 180, 2)
+        if g >= 0:
+            g = round((g - pi) / pi * 180, 2)
+        else :
+            g = g + pi
+            g = round((g - pi) / pi * 180, 2)
         
     return g
 
