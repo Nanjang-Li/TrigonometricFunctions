@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         self.ui = UiMainWindow()
         self.ui.setup_ui(self)
         self.is_compute = False  # 标志位，是否进行了运算
-        self.is_error = False   # 标志位，运算是否出错，出错了运算按钮将锁死
+        self.is_error = False  # 标志位，运算是否出错，出错了运算按钮将锁死
         self.ui.number_0_button.clicked.connect(lambda: self.display_number(0))
         self.ui.number_1_button.clicked.connect(lambda: self.display_number(1))
         self.ui.number_2_button.clicked.connect(lambda: self.display_number(2))
@@ -27,6 +27,7 @@ class MainWindow(QMainWindow):
         self.ui.del_button.clicked.connect(self.display_delete_one_number)
         self.ui.reset_button.clicked.connect(self.display_reset)
         self.ui.dot_button.clicked.connect(self.display_dot)
+        self.ui.sign_button.clicked.connect(self.change_sign)
         self.ui.sin_button.clicked.connect(lambda: self.compute(0))
         self.ui.cos_button.clicked.connect(lambda: self.compute(1))
         self.ui.arctan_button.clicked.connect(lambda: self.compute(2))
@@ -37,7 +38,10 @@ class MainWindow(QMainWindow):
         将显示框的文本转为对应的数值
         :return: number，字符串对应的值
         """
-        return eval(self.ui.display_box.text())
+        number_str = self.ui.display_box.text()
+        if "°" in number_str:
+            number_str = number_str[:-1]    # 去掉度数单位，截取数字文本
+        return eval(number_str)
 
     def display_to_box(self, content):
         """
@@ -123,6 +127,20 @@ class MainWindow(QMainWindow):
         self.is_compute = False
         self.is_error = False
         self.display_to_box("0")
+
+    def change_sign(self):
+        """
+        改变显示框上文本的正负号
+        :return:
+        """
+        display_content = self.ui.display_box.text()  # 获取显示框的文本
+        if display_content == "0":  # 文本内容为0，不作符号处理
+            return
+        elif "-" in display_content:
+            display_content = display_content[1:]
+        else:
+            display_content = "-" + display_content
+        self.display_to_box(display_content)
 
 
 if __name__ == "__main__":
