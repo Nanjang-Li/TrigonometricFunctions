@@ -2,31 +2,24 @@ import sys
 import math
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget, QComboBox, QHBoxLayout, QVBoxLayout, QPushButton, \
-    QLineEdit, QLabel
+    QLineEdit, QLabel, QRadioButton
 from TriFunctions import *
+from FunctionTest import TestFunc
 
 
 class Interface_method:
 
     def sin(self, value):
         return sin.sin(value)
-        # return mySin(value)
-        # return math.sin(value)
 
     def arcsin(self, value):
         return arcsin.asin(value)
-        # return invert_angle_to_rad(asin(value))
-        # return math.asin(value)
 
     def cos(self, value):
         return cos.cos(value)
-        # return myCos(value)
-        # return math.cos(value)
 
     def arctan(self, value):
         return arctan.atan(value)
-        # return atan(value)
-        # return math.atan(value)
 
     def get_func_name(self):
         return sorted(self.valueFunctions.keys())
@@ -94,6 +87,19 @@ class Example(QWidget):
 
         self.qlb_result = QLabel('result', self)
 
+        # 测试按钮布局
+        self.test_layout = QHBoxLayout()
+        # 是否进行测试
+        self.is_test_btn = QRadioButton("use test:")
+        self.is_test_btn.setFixedWidth(80)
+        self.is_test_btn.clicked.connect(self.is_test_slot)
+        # 测试按钮
+        self.test_btn = QPushButton("test")
+        self.test_btn.setEnabled(False)
+        self.test_btn.clicked.connect(self.test_slot)
+        self.test_layout.addWidget(self.is_test_btn)
+        self.test_layout.addWidget(self.test_btn)
+
         self.hbox_input = QHBoxLayout()
         self.hbox_output = QHBoxLayout()
         self.vbox = QVBoxLayout()
@@ -109,6 +115,7 @@ class Example(QWidget):
         self.vbox.addLayout(self.hbox_input)
         self.vbox.addLayout(self.hbox_output)
         self.vbox.addWidget(self.btn_Calc)
+        self.vbox.addLayout(self.test_layout)
         # vbox.setContentsMargins(0,0,0,0)
         self.setLayout(self.vbox)
         self.show()
@@ -138,7 +145,7 @@ class Example(QWidget):
             self.qle_input.setStyleSheet("color: black;")
             self.qle_output.setStyleSheet("color: black;")
             self.qle_output.setText("")
-            self.btn_Calc.setEnabled(True)
+            self.btn_Calc.setEnabled(not self.is_test_btn.isChecked())
 
     flag = 0
 
@@ -179,10 +186,26 @@ class Example(QWidget):
             str(self.method.get_func_result(self.cb_method.currentText(), float(eval(str_input)),
                                             self.btn_format_input.text() == "deg" and self.btn_format_input.isEnabled()  # 执行的是sin/cos计算
                                             or
-                                            self.btn_format_output.text() == "deg" and self.btn_format_output.isEnabled()  # 执行arcsin/arctan
+                                            self.btn_format_output.text() == "deg" and self.btn_format_output.isEnabled()
+                                            # 执行arcsin/arctan
                                             )
                 )
         )
+
+    def test_slot(self):
+        str_input = self.qle_input.text().strip()
+        test_ = TestFunc()
+        test_result = test_.test_value(self.cb_method.currentText(), eval(str_input))
+        self.qle_output.setText(str(test_result))
+
+    def is_test_slot(self):
+        def set_btns_enabled(bool_):
+            self.test_btn.setEnabled(bool_)
+            self.btn_Calc.setEnabled(not bool_)
+            self.btn_format_input.setEnabled(not bool_)
+            self.btn_format_output.setEnabled(not bool_)
+
+        set_btns_enabled(self.is_test_btn.isChecked())
 
 
 if __name__ == '__main__':
